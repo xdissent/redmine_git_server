@@ -1,0 +1,19 @@
+<p>
+  <%= f.select :extra_url_format, git_server_url_format_options, label: l(:label_git_server_url_format), disabled: !repo.new_record? %>
+</p>
+
+<p>
+  <%= f.text_field :url, size: 60, readonly: repo.url_format != "custom" %>
+</p>
+
+<p>
+  <%= f.select :path_encoding, [nil] + Setting::ENCODINGS, label: l(:field_scm_path_encoding) %>
+  <br>
+  <%= l :text_scm_path_encoding_note %>
+</p>
+
+<%# TODO: What's the Rails way to do this without asset pipeline? %>
+<%= javascript_tag do %>
+  window.project_hierarchy = <%= repo.project.self_and_ancestors.map(&:identifier).to_json.html_safe %>;
+<% end %>
+<%= javascript_include_tag "repository_fields", plugin: :redmine_git_server %>

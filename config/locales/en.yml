@@ -1,0 +1,6 @@
+# English strings go here for Rails i18n
+en:
+  label_git_server_url_format_hierarchical: Hierarchical (parent/project/identifier.git)
+  label_git_server_url_format_flat: Flat (project/identifier.git)
+  label_git_server_url_format_custom: Custom
+  label_git_server_url_format: URL format

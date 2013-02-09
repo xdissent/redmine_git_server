@@ -1,0 +1,6 @@
+<div class="box tabular settings">
+  <p>
+    <%= label_tag("settings_default_url_format", l(:setting_redmine_git_server_default_url_format)) %>
+    <%= select_tag "settings[default_url_format]", options_for_select(git_server_url_format_options, @settings["default_url_format"]) %>
+  </p>
+</div>
