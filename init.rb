@@ -22,14 +22,15 @@ Redmine::Plugin.register :redmine_git_server do
   RedmineApp::Application.config.to_prepare do
     RepositoriesController.send :include, GitServerRepositoriesHelped
     SettingsController.send :include, GitServerRepositoriesHelped
+    ProjectsController.send :include, GitServerRepositoriesHelped
   end
 
   # Configure GitWit for your application using this initializer.
   GitWit.configure do |config|
     config.repositories_path = Rails.root.join("tmp", "repositories").to_s
     config.ssh_user = "gitwit"
-    config.insecure_write = true
-    config.insecure_auth = true
+    config.insecure_write = false
+    config.insecure_auth = false
 
     config.user_for_authentication = ->(username) do
       User.active.find_by_login username
@@ -53,4 +54,13 @@ Redmine::Plugin.register :redmine_git_server do
       user.allowed_to? :commit_access, repo.project
     end
   end
+
+  class GitProjectShowHook < Redmine::Hook::ViewListener
+    render_on :view_projects_show_right, partial: "projects/git_urls"
+  end
+
+  class GitRepoUrlHook < Redmine::Hook::ViewListener
+    render_on :view_repositories_show_contextual, partial: "repositories/git_urls"
+  end
+
 end

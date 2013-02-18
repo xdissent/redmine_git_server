@@ -1,0 +1,24 @@
+.git-url-list-field {
+  margin-top: 0;
+  margin-right: 2px;
+  width: 145px;
+}
+
+.controller-repositories .git-url-list-field {
+  width: 350px;
+}
+
+.controller-projects .git-url-list-container {
+  margin-bottom: 2em;
+}
+
+.git-url-list-container .ui-button-text {
+  font-size: 11px;
+  line-height: normal;
+  font-weight: normal;
+  /*padding: 2px 7px 3px 5px;*/
+}
+
+.git-url-list-container .ui-button-icon-only {
+  /*width: 1.8em;*/
+}

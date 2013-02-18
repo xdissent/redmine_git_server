@@ -91,6 +91,18 @@ class Repository::GitServer < Repository::Git
     (url_format == "flat" ? ph.last : ph.join("/")) + (identifier.present? ? "/#{identifier}.git" : ".git")
   end
 
+  def git_ssh_url
+    "#{GitWit.ssh_user}@#{Setting.host_name}:#{url}"
+  end
+
+  def git_http_url
+    "http://#{Setting.host_name}/#{url}"
+  end
+
+  def git_https_url
+    "https://#{Setting.host_name}/#{url}"
+  end
+
 private
 
   def persistent_extra_info
