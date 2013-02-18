@@ -10,7 +10,7 @@ class Repository::GitServer < Repository::Git
   end
 
   def self.scm_adapter_class
-    RedmineGitServer::GitoliteAdapter
+    RedmineGitServer::GitWitAdapter
   end
 
   def self.scm_name
