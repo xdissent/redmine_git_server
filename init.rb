@@ -25,21 +25,30 @@ Redmine::Plugin.register :redmine_git_server do
     ProjectsController.send :include, GitServerRepositoriesHelped
   end
 
-  # Configure GitWit for your application using this initializer.
+  # Configure GitWit
+  GitWit.default_config!
   GitWit.configure do |config|
-    config.repositories_path = Rails.root.join("tmp", "repositories").to_s
-    config.ssh_user = "gitwit"
-    config.insecure_write = false
-    config.insecure_auth = false
+    # Pull settings from configuration.yml
+    settings = Redmine::Configuration["git_wit"] || {}
+    %w(repositories_path ssh_user insecure_write insecure_auth 
+      realm git_http_backend_path).each do |k|
+      config.send "#{k}=".to_sym, settings[k] if settings[k].present?
+    end
 
+    # Active users are valid for authentication. Don't use User.anonymous for
+    # anonymous users here. Use nil.
     config.user_for_authentication = ->(username) do
       User.active.find_by_login username
     end
 
+    # Check a user record (or nil) against a password.
     config.authenticate = ->(user, password) do
       user.try :check_password?, password
     end
 
+    # Attempt read authorization for a repository. The user will be nil if it's
+    # for anonymous access, so check permissions for User.anonymous. Checks for
+    # :view_changesets permission.
     config.authorize_read = ->(user, repository) do
       user ||= User.anonymous
       repo = Repository::GitServer.find_by_url repository
@@ -47,6 +56,9 @@ Redmine::Plugin.register :redmine_git_server do
       user.allowed_to? :view_changesets, repo.project
     end
 
+    # Attempt write authorization for a repository. The user will be nil if it's
+    # for anonymous access, so check permissions for User.anonymous. Checks for
+    # :commit_access permission.
     config.authorize_write = ->(user, repository) do
       user ||= User.anonymous
       repo = Repository::GitServer.find_by_url repository
@@ -54,13 +66,4 @@ Redmine::Plugin.register :redmine_git_server do
       user.allowed_to? :commit_access, repo.project
     end
   end
-
-  class GitProjectShowHook < Redmine::Hook::ViewListener
-    render_on :view_projects_show_right, partial: "projects/git_urls"
-  end
-
-  class GitRepoUrlHook < Redmine::Hook::ViewListener
-    render_on :view_repositories_show_contextual, partial: "repositories/git_urls"
-  end
-
 end
