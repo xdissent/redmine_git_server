@@ -1,10 +1,15 @@
-<% if project.repositories.present? && (User.current.allowed_to?(:view_changesets, project) || User.current.allowed_to?(:commit_access, project)) %>
+<% if project.repositories.present? && (
+    User.current.allowed_to?(:view_changesets, project) || 
+    User.current.allowed_to?(:commit_access, project)) %>
+    
   <div class="box">
     <h3>Git Repositories</h3>
     <% project.repositories.sort.each do |repo| %>
       <% next unless repo.is_a? Repository::GitServer %>
       <h4>
-        <%= link_to h(repo.name), controller: "repositories", action: "show", id: project, repository_id: repo.identifier_param, rev: nil, path: nil %>
+        <%= link_to h(repo.name), controller: "repositories", action: "show", 
+                    id: project, repository_id: repo.identifier_param, 
+                    rev: nil, path: nil %>
       </h4>
       <%= render partial: "repositories/git_urls_list", locals: {repository: repo} %>
     <% end %>
