@@ -9,6 +9,47 @@ class Repository::GitServer < Repository::Git
     extra_info["extra_url_format"] ||= self.class.default_url_format
   end
 
+  after_create :create_git_repository, unless: :git_repository_exists?
+
+  def create_git_repository
+    Grit::Repo.init_bare git_repository_path
+    install_git_hooks
+  end
+
+  def destroy_git_repository
+    FileUtils.rm_rf git_repository_path
+  end
+
+  def git_repository_path
+    File.join GitWit.repositories_path, url
+  end
+
+  def git_repository_exists?
+    File.exists? git_repository_path
+  end
+
+  def git_hooks_path
+    File.join git_repository_path, "hooks"
+  end
+
+  def post_receive_hook_path
+    File.join git_hooks_path, "post-receive"
+  end
+
+  def install_git_hooks
+    File.open(post_receive_hook_path, "w") { |f| f.write post_receive_hook }
+    File.chmod 0700, post_receive_hook_path
+  end
+
+  def post_receive_hook
+    http = Setting.protocol
+    host = Setting.host_name
+    key = Setting.sys_api_key
+    hook_url = "#{http}://#{host}/sys/fetch_changesets?key=#{key}"
+    hook_url << "&id=#{project.id}" if project.present?
+    %(#!/bin/sh\ncurl "#{hook_url}")
+  end
+
   def self.scm_adapter_class
     RedmineGitServer::GitWitAdapter
   end
