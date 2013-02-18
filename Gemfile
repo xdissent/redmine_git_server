@@ -1,3 +1,3 @@
 source :rubygems
 
-gem "gitolite", "~> 1.1.0"
+gem "git_wit", git: "https://github.com/xdissent/git_wit.git"
