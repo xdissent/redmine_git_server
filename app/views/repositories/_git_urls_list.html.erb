@@ -3,13 +3,13 @@
     <dt>SSH</dt>
     <dd><%= repository.git_ssh_url %></dd>
   <% end %>
-  <% if User.anonymous.allowed_to?(:view_changesets, repository.project) %>
-    <dt>HTTP</dt>
-    <dd><%= repository.git_http_url %></dd>
-  <% end %>
   <% if User.current.allowed_to?(:view_changesets, repository.project) %>
     <dt>HTTPS</dt>
     <dd><%= repository.git_https_url %></dd>
+  <% end %>
+  <% if User.anonymous.allowed_to?(:view_changesets, repository.project) %>
+    <dt>HTTP</dt>
+    <dd><%= repository.git_http_url %></dd>
   <% end %>
 </dl>
 <% git_urls_assets %>
