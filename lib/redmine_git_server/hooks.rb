@@ -7,5 +7,9 @@ module RedmineGitServer
     class RepositoryShowHook < Redmine::Hook::ViewListener
       render_on :view_repositories_show_contextual, partial: "repositories/git_urls"
     end
+
+    class MyAccountHook < Redmine::Hook::ViewListener
+      render_on :view_my_account_contextual, partial: "my/public_keys_link"
+    end
   end
 end

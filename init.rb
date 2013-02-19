@@ -9,7 +9,7 @@ Redmine::Plugin.register :redmine_git_server do
   author_url "http://xdissent.com"
   requires_redmine version_or_higher: "2.2.3"
   settings partial: "redmine_git_server", default: {
-    'default_url_format' => 'hierarchical'
+    "default_url_format" => "hierarchical"
   }
 
   # Autoload concerns - not necessary in Rails 4

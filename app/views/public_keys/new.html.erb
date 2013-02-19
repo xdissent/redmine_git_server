@@ -1,0 +1,9 @@
+<h2><%=l(:label_public_key_new)%></h2>
+
+<%= render "form" %>
+
+<%= link_to "Back", public_keys_path %>
+
+<% content_for :sidebar do %>
+  <%= render partial: "my/sidebar" %>
+<% end %>

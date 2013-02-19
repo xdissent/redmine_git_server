@@ -1,0 +1,27 @@
+<h2><%=l(:label_public_keys)%></h2>
+
+<% if @public_keys.empty? %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% else %>
+  <table>
+    <tr>
+      <th>Comment</th>
+      <th>Content</th>
+      <th></th>
+      <th></th>
+    </tr>
+  <% @public_keys.each do |public_key| %>
+    <tr>
+      <td><%= public_key.comment %></td>
+      <td><%= truncate public_key.content %></td>
+      <td><%= link_to "Show", public_key %></td>
+      <td><%= link_to "Destroy", public_key, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  <% end %>
+  </table>
+<% end %>
+<%= link_to "New Public key", new_public_key_path %>
+
+<% content_for :sidebar do %>
+  <%= render partial: "my/sidebar" %>
+<% end %>
