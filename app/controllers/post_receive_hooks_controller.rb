@@ -2,10 +2,12 @@ class PostReceiveHooksController < ApplicationController
   menu_item :repository
   
   before_filter :check_api_enabled, only: :run
+
   before_filter :find_project, only: [:index, :create, :new]
   before_filter :find_repository, only: [:run, :index, :create, :new]
 
   before_filter :find_post_receive_hook, only: [:show, :edit, :update, :destroy]
+  before_filter :find_project_from_repository, except: [:index, :create, :new]
 
   before_filter :check_project
   before_filter :check_repository
@@ -104,11 +106,14 @@ class PostReceiveHooksController < ApplicationController
     render_404_or_api
   end
 
+  def find_project_from_repository
+    @project = @repository.project
+    @repositories = @project.repositories
+  end
+
   def find_post_receive_hook
     @post_receive_hook = PostReceiveHook.find params[:id]
     @repository = @post_receive_hook.repository
-    @project = @repository.project
-    @repositories = @project.repositories
   rescue ActiveRecord::RecordNotFound
     render_404
   end
