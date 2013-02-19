@@ -4,7 +4,7 @@ en:
   label_git_server_url_format_flat: Flat (project/identifier.git)
   label_git_server_url_format_custom: Custom
   label_git_server_url_format: URL format
-  label_public_keys: Public keys
+  label_public_key_plural: Public keys
   label_public_key: Public key
   label_public_key_new: New public key
   label_public_key_raw_content: Public key contents
@@ -13,3 +13,5 @@ en:
   label_post_receive_hook: Hook
   label_post_receive_hook_plural: Hooks
   label_post_receive_hook_edit: Edit hook
+  field_public_key_comment: Comment
+  field_public_key_content: Key Contents

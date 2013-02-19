@@ -2,7 +2,7 @@
   <h3><%= l(:label_post_receive_hook_plural) %></h3>
   <% if @repository.post_receive_hooks.any? %>
       <% @repository.post_receive_hooks.each do |hook| %>
-        <%= link_to hook.name, hook %><br />
+        <%= link_to hook.name, edit_post_receive_hook_path(hook) %><br />
       <% end %>
   <% end %>
   <p>

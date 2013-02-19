@@ -1,25 +1,11 @@
-<%= form_for(@post_receive_hook) do |f| %>
-  <% if @post_receive_hook.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@post_receive_hook.errors.count, "error") %> prohibited this post_receive_hook from being saved:</h2>
+<%= error_messages_for "post_receive_hook" %>
 
-      <ul>
-      <% @post_receive_hook.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+<div class="box tabular">
+  <p><%= f.text_field :name %></p>
+  <p><%= f.text_field :url %></p>
+</div>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :url %><br />
-    <%= f.text_field :url %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+<p>
+  <%= submit_tag(@post_receive_hook.new_record? ? l(:button_create) : l(:button_save)) %>
+  <%= link_to l(:button_cancel), post_receive_hooks_path(@project, @repository) %>
+</p>
