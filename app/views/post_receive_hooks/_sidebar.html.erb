@@ -1,0 +1,12 @@
+<div>
+  <h3><%= l(:label_post_receive_hook_plural) %></h3>
+  <% if @repository.post_receive_hooks.any? %>
+      <% @repository.post_receive_hooks.each do |hook| %>
+        <%= link_to hook.name, edit_post_receive_hook_path(hook) %><br />
+      <% end %>
+  <% end %>
+  <p>
+    <%= link_to l(:label_post_receive_hook_new), new_post_receive_hook_path(@project, @repository) %> |
+    <%= link_to l(:label_post_receive_hook_index), post_receive_hooks_path(@project, @repository) %>
+  </p>
+</div>

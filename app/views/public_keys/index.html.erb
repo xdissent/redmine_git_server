@@ -1,26 +1,33 @@
-<h2><%=l(:label_public_keys)%></h2>
+<h2><%=l(:label_public_key_plural)%></h2>
 
 <% if @public_keys.empty? %>
   <p class="nodata"><%= l(:label_no_data) %></p>
 <% else %>
-  <table>
-    <tr>
-      <th>Comment</th>
-      <th>Content</th>
-      <th></th>
-      <th></th>
-    </tr>
-  <% @public_keys.each do |public_key| %>
-    <tr>
-      <td><%= public_key.comment %></td>
-      <td><%= truncate public_key.content %></td>
-      <td><%= link_to "Show", public_key %></td>
-      <td><%= link_to "Destroy", public_key, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-    </tr>
-  <% end %>
-  </table>
+
+  <div class="autoscroll">
+    <table class="list entries" id="browser">
+      <thead>
+        <tr id="root">
+          <th><%= l(:field_public_key_comment) %></th>
+          <th><%= l(:field_public_key_content) %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @public_keys.each do |public_key| %>
+          <tr>
+            <td><%= link_to public_key.comment, public_key %></td>
+            <td><%= truncate public_key.content %></td>
+            <td><%= link_to l(:button_delete), public_key, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+    
 <% end %>
-<%= link_to "New Public key", new_public_key_path %>
+
+<%= link_to l(:label_public_key_new), new_public_key_path %>
 
 <% content_for :sidebar do %>
   <%= render partial: "my/sidebar" %>

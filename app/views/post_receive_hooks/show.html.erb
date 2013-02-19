@@ -1,0 +1,20 @@
+<h2><%= l(:label_post_receive_hook) %></h2>
+
+<div class="box">
+  <p>
+    <b>Name:</b>
+    <%= @post_receive_hook.name %>
+  </p>
+  <p>
+    <b>Url:</b>
+    <%= @post_receive_hook.url %>
+  </p>
+</div>
+
+<%= link_to l(:label_post_receive_hook_edit), edit_post_receive_hook_path %> |
+<%= link_to l(:button_back), post_receive_hooks_path(@project, @repository) %>
+
+<% content_for :sidebar do %>
+  <%= render "sidebar" %>
+  <%= render "repositories_sidebar" %>
+<% end %>

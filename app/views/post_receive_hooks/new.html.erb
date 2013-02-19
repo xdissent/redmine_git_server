@@ -1,0 +1,10 @@
+<h2><%= l(:label_post_receive_hook_new) %></h2>
+
+<%= labelled_form_for(@post_receive_hook) do |f| %>
+  <%= render :partial => "form", :locals => {:f => f} %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <%= render "sidebar" %>
+  <%= render "repositories_sidebar" %>
+<% end %>

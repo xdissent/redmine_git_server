@@ -1,0 +1,11 @@
+<%= error_messages_for "post_receive_hook" %>
+
+<div class="box tabular">
+  <p><%= f.text_field :name %></p>
+  <p><%= f.text_field :url %></p>
+</div>
+
+<p>
+  <%= submit_tag(@post_receive_hook.new_record? ? l(:button_create) : l(:button_save)) %>
+  <%= link_to l(:button_cancel), post_receive_hooks_path(@project, @repository) %>
+</p>

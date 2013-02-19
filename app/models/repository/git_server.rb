@@ -1,4 +1,5 @@
 class Repository::GitServer < Repository::Git
+  has_many :post_receive_hooks, foreign_key: :repository_id
 
   validates_uniqueness_of :url
   validate :url_format_inclusion
@@ -13,7 +14,7 @@ class Repository::GitServer < Repository::Git
 
   def create_git_repository
     Grit::Repo.init_bare git_repository_path
-    install_git_hooks
+    install_git_hooks!
   end
 
   def destroy_git_repository
@@ -36,7 +37,7 @@ class Repository::GitServer < Repository::Git
     File.join git_hooks_path, "post-receive"
   end
 
-  def install_git_hooks
+  def install_git_hooks!
     File.open(post_receive_hook_path, "w") { |f| f.write post_receive_hook }
     File.chmod 0700, post_receive_hook_path
   end
@@ -45,9 +46,9 @@ class Repository::GitServer < Repository::Git
     http = Setting.protocol
     host = Setting.host_name
     key = Setting.sys_api_key
-    hook_url = "#{http}://#{host}/sys/fetch_changesets?key=#{key}"
-    hook_url << "&id=#{project.id}" if project.present?
-    %(#!/bin/sh\ncurl "#{hook_url}")
+    url_path = "repositories/#{id}/post_receive_hooks/run"
+    hook_url = "#{http}://#{host}/#{url_path}?key=#{key}"
+    %(#!/bin/sh\ncurl -s -T - "#{hook_url}")
   end
 
   def self.scm_adapter_class
