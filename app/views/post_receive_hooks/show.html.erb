@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @post_receive_hook.name %>
+</p>
+
+<p>
+  <b>Repository:</b>
+  <%= @post_receive_hook.repository %>
+</p>
+
+<p>
+  <b>Url:</b>
+  <%= @post_receive_hook.url %>
+</p>
+
+
+<%= link_to 'Edit', edit_post_receive_hook_path(@post_receive_hook) %> |
+<%= link_to 'Back', post_receive_hooks_path(@post_receive_hook.repository) %>

@@ -1,4 +1,5 @@
 class Repository::GitServer < Repository::Git
+  has_many :post_receive_hooks, foreign_key: :repository_id
 
   validates_uniqueness_of :url
   validate :url_format_inclusion
