@@ -1,5 +1,10 @@
-<h1>New post_receive_hook</h1>
+<h2><%= l(:label_post_receive_hook_new) %></h2>
 
-<%= render 'form' %>
+<div class="box">
+  <%= render "form" %>
+</div>
 
-<%= link_to 'Back', post_receive_hooks_path %>
+<% content_for :sidebar do %>
+  <%= render "repositories/hooks_sidebar" %>
+  <%= render "repositories_sidebar" %>
+<% end %>

@@ -1,27 +1,33 @@
-<h1>Listing post_receive_hooks</h1>
+<h2><%= l(:label_post_receive_hook_plural) %></h2>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Repository</th>
-    <th>Url</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<div class="autoscroll">
+  <table class="list entries" id="browser">
+    <thead>
+      <tr id="root">
+        <th><%= l(:field_name) %></th>
+        <th><%= l(:field_url) %></th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @post_receive_hooks.each do |post_receive_hook| %>
+        <tr>
+          <td><%= post_receive_hook.name %></td>
+          <td><%= post_receive_hook.url %></td>
+          <td><%= link_to 'Show', post_receive_hook %></td>
+          <td><%= link_to 'Edit', edit_post_receive_hook_path(post_receive_hook) %></td>
+          <td><%= link_to 'Destroy', post_receive_hook, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 
-<% @post_receive_hooks.each do |post_receive_hook| %>
-  <tr>
-    <td><%= post_receive_hook.name %></td>
-    <td><%= post_receive_hook.repository %></td>
-    <td><%= post_receive_hook.url %></td>
-    <td><%= link_to 'Show', post_receive_hook %></td>
-    <td><%= link_to 'Edit', edit_post_receive_hook_path(post_receive_hook) %></td>
-    <td><%= link_to 'Destroy', post_receive_hook, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
+<%= link_to l(:label_post_receive_hook_new), new_post_receive_hook_path %>
+
+<% content_for :sidebar do %>
+  <%= render "repositories/hooks_sidebar" %>
+  <%= render "repositories_sidebar" %>
 <% end %>
-</table>
-
-<br />
-
-<%= link_to 'New Post receive hook', new_post_receive_hook_path %>

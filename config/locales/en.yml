@@ -8,3 +8,8 @@ en:
   label_public_key: Public key
   label_public_key_new: New public key
   label_public_key_raw_content: Public key contents
+  label_post_receive_hook_new: Add new hook
+  label_post_receive_hook_index: View all hooks
+  label_post_receive_hook: Hook
+  label_post_receive_hook_plural: Hooks
+  label_post_receive_hook_edit: Edit hook

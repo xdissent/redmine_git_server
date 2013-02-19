@@ -1,6 +1,10 @@
-<h1>Editing post_receive_hook</h1>
+<h2><%= l(:label_post_receive_hook_edit) %></h2>
 
-<%= render 'form' %>
+<div class="box">
+  <%= render "form" %>
+</div>
 
-<%= link_to 'Show', @post_receive_hook %> |
-<%= link_to 'Back', post_receive_hooks_path(@post_receive_hook.repository) %>
+<% content_for :sidebar do %>
+  <%= render "repositories/hooks_sidebar" %>
+  <%= render "repositories_sidebar" %>
+<% end %>

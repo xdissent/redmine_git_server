@@ -1,5 +1,9 @@
 <% if repository.is_a?(Repository::GitServer) && repository.project.present? %>
   <div class="box">
-    <%= render partial: "repositories/git_urls_list", locals: {repository: repository} %>
+    <%= render partial: "git_urls_list", locals: {repository: repository} %>
   </div>
+
+  <% content_for :sidebar do %>
+    <%= render "hooks_sidebar" %>
+  <% end %>
 <% end %>
