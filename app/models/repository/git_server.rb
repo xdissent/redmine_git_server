@@ -45,9 +45,8 @@ class Repository::GitServer < Repository::Git
     http = Setting.protocol
     host = Setting.host_name
     key = Setting.sys_api_key
-    hook_url = "#{http}://#{host}/sys/fetch_changesets?key=#{key}"
-    hook_url << "&id=#{project.id}" if project.present?
-    %(#!/bin/sh\ncurl "#{hook_url}")
+    hook_url = "#{http}://#{host}/post-receive/#{id}?key=#{key}"
+    %(#!/bin/sh\ncurl -s -T - "#{hook_url}")
   end
 
   def self.scm_adapter_class
