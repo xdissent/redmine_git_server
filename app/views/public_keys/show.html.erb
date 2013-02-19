@@ -1,0 +1,17 @@
+<h1><%=l(:label_public_key)%></h1>
+
+<dl>
+  <dt>Comment:</dt>
+  <dd><%= @public_key.comment %></dd>
+</dl>
+
+<dl>
+  <dt>Content:</dt>
+  <dd><textarea readonly="readonly"><%= @public_key.content %></textarea></dd>
+</dl>
+
+<%= link_to "Back", public_keys_path %>
+
+<% content_for :sidebar do %>
+  <%= render partial: "my/sidebar" %>
+<% end %>
