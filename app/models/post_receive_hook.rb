@@ -9,6 +9,8 @@ class PostReceiveHook < ActiveRecord::Base
 
   def deliver_payload(payload)
     uri = URI(url)
+    raise HookError.new self, "Invalid URI" if uri.is_a? URI::Generic
+    
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = (uri.scheme == "https")
 
