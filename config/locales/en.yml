@@ -15,3 +15,4 @@ en:
   label_post_receive_hook_edit: Edit hook
   field_public_key_comment: Comment
   field_public_key_content: Key Contents
+  field_raw_content: Key Contents

@@ -1,17 +1,17 @@
 <h1><%=l(:label_public_key)%></h1>
 
 <dl>
-  <dt>Comment:</dt>
+  <dt><%= l(:field_public_key_comment) %>:</dt>
   <dd><%= @public_key.comment %></dd>
 </dl>
 
 <dl>
-  <dt>Content:</dt>
+  <dt><%= l(:field_public_key_content) %></dt>
   <dd><textarea readonly="readonly"><%= @public_key.content %></textarea></dd>
 </dl>
 
-<%= link_to "Back", public_keys_path %>
+<%= link_to l(:button_back), public_keys_path %>
 
 <% content_for :sidebar do %>
-  <%= render partial: "my/sidebar" %>
+  <%= render "my_sidebar" %>
 <% end %>

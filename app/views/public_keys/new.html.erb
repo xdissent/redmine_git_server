@@ -1,9 +1,9 @@
 <h2><%=l(:label_public_key_new)%></h2>
 
-<%= render "form" %>
-
-<%= link_to l(:button_back), public_keys_path %>
+<%= labelled_form_for(@public_key) do |f| %>
+  <%= render :partial => "form", :locals => {:f => f} %>
+<% end %>
 
 <% content_for :sidebar do %>
-  <%= render partial: "my/sidebar" %>
+  <%= render "my_sidebar" %>
 <% end %>
