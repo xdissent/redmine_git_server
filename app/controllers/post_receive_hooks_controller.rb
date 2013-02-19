@@ -40,7 +40,7 @@ class PostReceiveHooksController < ApplicationController
   def payloads
     request.body.read.split("\n").map do |line| 
       oldhead, newhead, refname = line.to_s.chomp.split " "
-      if valid_refname?(refname) && valid_newhead?(newhead) && valid_oldhead?(oldhead)
+      if valid_refname?(refname) && valid_newhead?(newhead)
         payload(oldhead, newhead, refname)
       end
     end.compact
@@ -78,40 +78,46 @@ class PostReceiveHooksController < ApplicationController
 
   def revision_url(revision)
     url_for controller: "repositories", action: "revision", 
-      id: @repository.project, rev: revision.revision, only_path: false, 
+      id: @repository.project, rev: revision.identifier, only_path: false, 
       host: Setting.host_name, protocol: Setting.protocol
   end
 
   def commits_between(oldhead, newhead)
-    commits = []
-    old_changeset = @repository.find_changeset_by_name(oldhead)
-    new_changeset = @repository.find_changeset_by_name(newhead)
-    @repository.changesets.where(id: old_changeset.id..new_changeset.id).find_each do |revision|
-      commit = {
-        id: revision.revision,
-        url: revision_url(revision),
-        author: {
-          name: revision.committer.gsub(/^([^<]+)\s+.*$/, '\1'),
-          email: revision.committer.gsub(/^.*<([^>]+)>.*$/, '\1')
-        },
-        message: revision.comments,
-        timestamp: revision.committed_on,
-        added: [],
-        modified: [],
-        removed: []
-      }
-      revision.filechanges.find_each do |change|
-        if change.action == "M"
-          commit[:modified] << change.path
-        elsif change.action == "A"
-          commit[:added] << change.path
-        elsif change.action == "D"
-          commit[:removed] << change.path
-        end
-      end
-      commits << commit
+    oldhead = "HEAD" if oldhead.match /^0{40}$/ # New branch, check from HEAD
+    @repository.scm.revisions(nil, oldhead, newhead, reverse: true).map do |revision|
+      commit_for_revision(revision)
     end
-    commits
+  end
+
+  def changes_for_revision(revision)
+    changes = {modified: [], added: [], removed: []}
+    revision.paths.each do |change|
+      if change[:action] == "M"
+        changes[:modified] << change[:path]
+      elsif change[:action] == "A"
+        changes[:added] << change[:path]
+      elsif change[:action] == "D"
+        changes[:removed] << change[:path]
+      end
+    end
+    changes
+  end
+
+  def commit_for_revision(revision)
+    changes = changes_for_revision(revision)
+    {
+      id: revision.identifier,
+      url: revision_url(revision),
+      author: {
+        name: revision.author.gsub(/^([^<]+)\s+.*$/, '\1'),
+        email: revision.author.gsub(/^.*<([^>]+)>.*$/, '\1')
+      },
+      message: revision.message,
+      timestamp: revision.time,
+      added: changes[:added],
+      modified: changes[:modified],
+      removed: changes[:removed]
+    }
   end
 
   def valid_refname?(refname)
@@ -120,9 +126,5 @@ class PostReceiveHooksController < ApplicationController
 
   def valid_newhead?(newhead)
     !newhead.match(/^0{40}$/).present?
-  end
-
-  def valid_oldhead?(oldhead)
-    !oldhead.match(/^0{40}$/).present?
   end
 end
