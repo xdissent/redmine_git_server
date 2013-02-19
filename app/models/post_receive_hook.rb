@@ -16,8 +16,17 @@ class PostReceiveHook < ActiveRecord::Base
     request = Net::HTTP::Post.new(uri.request_uri)
     request.set_form_data "payload" => payload.to_hash.to_json
     res = http.start { |s| s.request request }
-    raise HookError unless res.is_a? Net::HTTPSuccess
+    raise HookError.new self, "Response error" unless res.is_a? Net::HTTPSuccess
+  rescue SocketError, Timeout::Error, EOFError
+    raise HookError.new self, "Request error"
   end
 
-  class HookError < Exception; end
+  class HookError < Exception
+    attr_accessor :post_receive_hook
+
+    def initialize(post_receive_hook, msg = nil)
+      super msg
+      self.post_receive_hook = post_receive_hook
+    end
+  end
 end

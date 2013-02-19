@@ -10,8 +10,7 @@ class PostReceiveHooksController < ApplicationController
 
   def run
     @repository.fetch_changesets
-    deliver_payloads if @repository.post_receive_hooks.any?
-    render text: "Thanks for using Redmine Git Server\n", status: 200
+    deliver_payloads
   end
 
   def index
@@ -73,7 +72,7 @@ class PostReceiveHooksController < ApplicationController
     @post_receive_hook.destroy
 
     respond_to do |format|
-      format.html { redirect_to post_receive_hooks_url }
+      format.html { redirect_to post_receive_hooks_url(@post_receive_hook.repository) }
       format.json { head :no_content }
     end
   end
@@ -100,9 +99,17 @@ class PostReceiveHooksController < ApplicationController
     end
   end
 
+  def payloads
+    return [] unless @repository.post_receive_hooks.any?
+    PostReceiveHook::Payload.parse_refs @repository, request.body.read
+  end
+
+  def hooks
+    @repository.post_receive_hooks
+  end
+
   def deliver_payloads
-    payloads = PostReceiveHook::Payload.parse_refs @repository, request.body.read
-    @repository.post_receive_hooks.find_each { |p| p.deliver_payloads payloads }
+    self.response_body = PayloadStreamer.new payloads, hooks
   end
 
   def render_404_or_api
@@ -119,5 +126,50 @@ class PostReceiveHooksController < ApplicationController
     render_404 unless @repository.present? && @repository.is_a?(Repository::GitServer)
   rescue ActiveRecord::RecordNotFound
     render_404
+  end
+
+  class PayloadStreamer
+    attr_accessor :payloads, :hooks, :failures
+
+    def initialize(payloads, hooks)
+      self.payloads = payloads
+      self.hooks = hooks
+      self.failures = []
+    end
+
+    def outro
+      "Thanks for using Redmine Git Server\n"
+    end
+
+    def failure_boundary
+      "\n*** WARNING ***\n\n"
+    end
+
+    def failures_display
+      failure_boundary +
+      "The following hooks had errors:\n" +
+      failures.uniq.map { |f| "\t#{f.name} (#{f.url}) - errors: #{failures.count(f)}\n" }.join +
+      "\nDon't panic - your code is fine.\n\n"
+    end
+
+    def each
+      yield "Beginning post-receive hooks...\n" if payloads.any? && hooks.any?
+      payloads.each_with_index do |payload, payload_index|
+        yield "Delivering hooks payload #{payload_index + 1} of #{payloads.length}...\n"
+        hooks.find_each do |hook|
+          begin
+            yield "\tPOSTing to hook #{hook.name} - #{hook.url}... "
+            hook.deliver_payload payload
+            yield "success!\n"
+          rescue PostReceiveHook::HookError => error
+            yield "\n\n*** Oops! The hook named #{hook.name} failed: #{error.message}\n\n"
+            failures << hook
+          end
+        end
+        yield "Delivered payload #{payload_index + 1} of #{payloads.length}\n"
+      end
+      yield failures_display if failures.any?
+      yield outro
+    end
   end
 end
