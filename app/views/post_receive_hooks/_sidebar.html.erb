@@ -1,10 +1,12 @@
-<%# Be explicit so this view may be rendered by any controller. %>
-<h3><%= l(:label_post_receive_hook_plural) %></h3>
+<% if %w(repositories post_receive_hooks).include? controller_name %>
+  <%# Be explicit so this view may be rendered by any controller. %>
+  <h4><%= l(:label_post_receive_hook_plural) %></h4>
 
-<div class="post_receive_hooks">
-  <%= render partial: "post_receive_hooks/post_receive_hook.js", collection: @repository.post_receive_hooks %>
-</div>
+  <div class="post_receive_hooks">
+    <%= render partial: "post_receive_hooks/post_receive_hook.js", collection: @repository.post_receive_hooks %>
+  </div>
 
-<p>
-  <%= link_to l(:label_post_receive_hook_new), new_post_receive_hook_path(@project, @repository), remote: true %>
-</p>
+  <p>
+    <%= link_to l(:label_post_receive_hook_new), new_post_receive_hook_path(@project, @repository), remote: true %>
+  </p>
+<% end %>

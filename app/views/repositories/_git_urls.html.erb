@@ -2,8 +2,4 @@
   <div class="box">
     <%= render partial: "git_urls_list", locals: {repository: repository} %>
   </div>
-
-  <% content_for :sidebar do %>
-    <%= render "post_receive_hooks/sidebar" %>
-  <% end %>
 <% end %>
