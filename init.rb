@@ -12,6 +12,11 @@ Redmine::Plugin.register :redmine_git_server do
     "default_url_format" => "hierarchical"
   }
 
+  project_module :repository do
+    permission :view_post_receive_hooks, {post_receive_hooks: [:index, :show]}, require: :member
+    permission :manage_post_receive_hooks, {post_receive_hooks: [:new, :create, :edit, :update, :destroy]}, require: :member
+  end
+
   # Autoload concerns - not necessary in Rails 4
   ActiveSupport::Dependencies.autoload_paths += %w{models controllers}.map { |c| File.join directory, "app/#{c}/concerns" }
 

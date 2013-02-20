@@ -2,13 +2,14 @@ class PostReceiveHooksController < ApplicationController
   menu_item :repository
 
   respond_to :html, :json
-  respond_to :js, except: [:run, :index, :show]
+  respond_to :js, except: [:run, :index]
 
   skip_before_filter :verify_authenticity_token, :check_if_login_required, 
     only: :run
 
   before_filter :check_api_enabled, :find_repository_api, only: :run
   before_filter :find_project_and_repository, except: :run
+  before_filter :authorize, except: :run
   before_filter :find_post_receive_hook, except: [:run, :index, :new, :create]
   before_filter :check_project
   before_filter :find_repositories, except: :run

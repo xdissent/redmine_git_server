@@ -1,0 +1,26 @@
+<% show = capture do %>
+  <h3 class="title"><%= l(:label_post_receive_hook) %></h3>
+
+  <div class="box">
+    <dl>
+      <dt><%= l(:field_name) %>:</dt>
+      <dd><%= @post_receive_hook.name %></dd>
+    </dl>
+
+    <dl>
+      <dt><%= l(:field_url) %></dt>
+      <dd><%= @post_receive_hook.url %></dd>
+    </dl>
+  </div>
+
+  <p class="buttons">
+    <%= submit_tag l(:button_cancel), onclick: "hideModal(this);", type: "button" %>
+  </p>
+<% end %>
+
+$("#ajax-modal")
+  .html("<%= escape_javascript show %>")
+  .find(".box")
+    .css("z-index", "auto");
+
+showModal("ajax-modal", "600px");

@@ -1,12 +1,15 @@
-<% if ((controller_name == "repositories" && action_name == "show") || controller_name == "post_receive_hooks") && @repository.is_a?(Repository::GitServer) %>
+<% if ((controller_name == "repositories" && action_name == "show") || controller_name == "post_receive_hooks") && @repository.is_a?(Repository::GitServer) && User.current.allowed_to?(:view_post_receive_hooks, @project) %>
   <%# Be explicit so this view may be rendered by any controller. %>
+
+  <% if User.current.allowed_to?(:manage_post_receive_hooks, @project) %>
+    <div class="contextual">
+      <%= link_to l(:button_add), new_post_receive_hook_path(@project, @repository), remote: true %>
+    </div>
+  <% end %>
+
   <h4><%= l(:label_post_receive_hook_plural) %></h4>
 
   <div class="post_receive_hooks">
     <%= render partial: "post_receive_hooks/post_receive_hook.js", collection: @repository.post_receive_hooks %>
   </div>
-
-  <p>
-    <%= link_to l(:label_post_receive_hook_new), new_post_receive_hook_path(@project, @repository), remote: true %>
-  </p>
 <% end %>

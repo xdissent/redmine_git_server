@@ -1,4 +1,4 @@
-<% if %w(my public_keys).include? controller_name %>
+<% if controller_name == "public_keys" || (controller_name == "my" && %w(account password).include?(action_name)) %>
   <%# Be explicit so this view may be rendered by any controller. %>
   <h4><%= l(:label_public_key_plural) %></h4>
 
