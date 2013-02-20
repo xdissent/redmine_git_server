@@ -1,0 +1,5 @@
+<tr>
+  <td><%= link_to public_key.comment, public_key %></td>
+  <td><%= truncate public_key.content %></td>
+  <td><%= link_to l(:button_delete), public_key, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+</tr>

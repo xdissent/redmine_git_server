@@ -1,0 +1,9 @@
+<% if @public_key.valid? %>
+  hideModal();
+  $("<%= escape_javascript render(@public_key) %>")
+    .appendTo(".public_keys")
+    .effect("highlight");
+<% else %>
+  $("#errorExplanation").remove();
+  $("<%= escape_javascript error_messages_for("public_key") %>").prependTo("#new_public_key");
+<% end %>

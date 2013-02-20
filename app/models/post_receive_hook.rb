@@ -2,6 +2,8 @@ class PostReceiveHook < ActiveRecord::Base
   belongs_to :repository
 
   attr_accessible :name, :url
+  
+  validates :name, :url, :repository, presence: true
 
   def deliver_payloads(payloads)
     payloads.each { |payload| deliver_payload payload }

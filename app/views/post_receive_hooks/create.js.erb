@@ -1,4 +1,9 @@
-hideModal();
-$("<%= escape_javascript render(@post_receive_hook) %>")
-  .appendTo(".post_receive_hooks")
-  .effect("highlight");
+<% if @post_receive_hook.valid? %>
+  hideModal();
+  $("<%= escape_javascript render(@post_receive_hook) %>")
+    .appendTo(".post_receive_hooks")
+    .effect("highlight");
+<% else %>
+  $("#errorExplanation").remove();
+  $("<%= escape_javascript error_messages_for("post_receive_hook") %>").prependTo("#new_post_receive_hook");
+<% end %>

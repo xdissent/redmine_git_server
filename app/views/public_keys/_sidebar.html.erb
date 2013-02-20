@@ -1,0 +1,12 @@
+<% if %w(my public_keys).include? controller_name %>
+  <%# Be explicit so this view may be rendered by any controller. %>
+  <h4><%= l(:label_public_key_plural) %></h4>
+
+  <div class="public_keys">
+    <%= render partial: "public_keys/public_key.js", collection: @user.public_keys %>
+  </div>
+
+  <p>
+    <%= link_to l(:label_public_key_new), new_public_key_path, remote: true %>
+  </p>
+<% end %>

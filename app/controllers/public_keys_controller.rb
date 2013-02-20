@@ -1,69 +1,43 @@
 class PublicKeysController < ApplicationController
+
+  respond_to :html, :json
+  respond_to :js, except: :index
+
   before_filter :require_login
 
   before_filter :find_user
   before_filter :find_public_key, :authorize_owner, only: [:show, :destroy]
 
-  # GET /public_keys
-  # GET /public_keys.json
   def index
     @public_keys = PublicKey.where user_id: @user
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @public_keys }
-    end
+    respond_with @public_keys
   end
 
-  # GET /public_keys/1
-  # GET /public_keys/1.json
   def show
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @public_key }
-    end
+    respond_with @public_key
   end
 
-  # GET /public_keys/new
-  # GET /public_keys/new.json
   def new
     @public_key = PublicKey.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @public_key }
-    end
+    respond_with @public_key
   end
 
-  # POST /public_keys
-  # POST /public_keys.json
   def create
     @public_key = PublicKey.new(params[:public_key])
     @public_key.user = @user
 
-    respond_to do |format|
-      if @public_key.save
-        GitWit.add_authorized_key(@user.login, @public_key.raw_content)
-
-        format.html { redirect_to @public_key, notice: 'PublicKey was successfully created.' }
-        format.json { render json: @public_key, status: :created, location: @public_key }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @public_key.errors, status: :unprocessable_entity }
-      end
+    if @public_key.save
+      GitWit.add_authorized_key(@user.login, @public_key.raw_content)
+      flash[:notice] = "Public key was successfully created." unless request.xhr?
     end
+    respond_with @public_key
   end
 
-  # DELETE /public_keys/1
-  # DELETE /public_keys/1.json
   def destroy
     @public_key.destroy 
     GitWit.remove_authorized_key(@public_key.raw_content)
-
-    respond_to do |format|
-      format.html { redirect_to public_keys_url }
-      format.json { head :no_content }
-    end
+    flash[:notice] = "Public key was successfully deleted." unless request.xhr?
+    respond_with @public_key
   end
 
   def find_user

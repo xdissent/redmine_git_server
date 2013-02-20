@@ -1,0 +1,26 @@
+<% show = capture do %>
+  <h3 class="title"><%= l(:label_public_key) %></h3>
+
+  <div class="box">
+    <dl>
+      <dt><%= l(:field_public_key_comment) %>:</dt>
+      <dd><%= @public_key.comment %></dd>
+    </dl>
+
+    <dl>
+      <dt><%= l(:field_public_key_content) %></dt>
+      <dd><textarea readonly="readonly"><%= @public_key.content %></textarea></dd>
+    </dl>
+  </div>
+
+  <p class="buttons">
+    <%= submit_tag l(:button_cancel), onclick: "hideModal(this);", type: "button" %>
+  </p>
+<% end %>
+
+$("#ajax-modal")
+  .html("<%= escape_javascript show %>")
+  .find(".box")
+    .css("z-index", "auto");
+
+showModal("ajax-modal", "600px");

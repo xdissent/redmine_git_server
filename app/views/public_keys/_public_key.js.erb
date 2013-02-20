@@ -1,0 +1,7 @@
+<%# Use full url paths in here because it may be rendered in another controller. %>
+<%= div_for public_key do %>
+  <%= link_to public_key.comment, public_key, remote: true %>
+  <%= content_tag :span, class: "splitcontentright" do %>
+    <%= link_to l(:button_delete), public_key, remote: true, method: :delete, data: { confirm: "Are you sure?" } %>
+  <% end %>
+<% end %>

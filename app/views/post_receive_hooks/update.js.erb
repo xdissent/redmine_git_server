@@ -1,3 +1,8 @@
-hideModal();
-$("#<%= dom_id @post_receive_hook %>").replaceWith("<%= escape_javascript render(@post_receive_hook) %>");
-$("#<%= dom_id @post_receive_hook %>").effect("highlight");
+<% if @post_receive_hook.valid? %>
+  hideModal();
+  $("#<%= dom_id @post_receive_hook %>").replaceWith("<%= escape_javascript render(@post_receive_hook) %>");
+  $("#<%= dom_id @post_receive_hook %>").effect("highlight");
+<% else %>
+  $("#errorExplanation").remove();
+  $("<%= escape_javascript error_messages_for("post_receive_hook") %>").prependTo("#edit_post_receive_hook_<%= @post_receive_hook.id %>");
+<% end %>

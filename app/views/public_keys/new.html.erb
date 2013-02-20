@@ -2,6 +2,11 @@
 
 <%= labelled_form_for(@public_key) do |f| %>
   <%= render :partial => "form", :locals => {:f => f} %>
+
+  <p>
+    <%= f.submit l(:button_create) %>
+    <%= link_to l(:button_cancel), public_keys_path %>
+  </p>
 <% end %>
 
 <% content_for :sidebar do %>

@@ -1,10 +1,5 @@
-<%= error_messages_for "post_receive_hook" %>
+<%= error_messages_for "public_key" %>
 
 <div class="box tabular">
   <p><%= f.text_area :raw_content %></p>
 </div>
-
-<p>
-  <%= f.submit l(:button_create)  %>
-  <%= link_to l(:button_cancel), public_keys_path %>
-</p>
