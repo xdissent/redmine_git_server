@@ -1,4 +1,4 @@
-<% if (controller_name == "repositories" && action_name == "show") || controller_name == "post_receive_hooks" %>
+<% if ((controller_name == "repositories" && action_name == "show") || controller_name == "post_receive_hooks") && @repository.is_a?(Repository::GitServer) %>
   <%# Be explicit so this view may be rendered by any controller. %>
   <h4><%= l(:label_post_receive_hook_plural) %></h4>
 
