@@ -1,0 +1,19 @@
+<% form = capture do %>
+  <h3 class="title"><%= l(:label_post_receive_hook_edit) %></h3>
+
+  <%= labelled_form_for @post_receive_hook, remote: true do |f| %>
+    <%= render partial: "form.html", locals: {f: f} %>
+
+    <p class="buttons">
+      <%= f.submit l(:button_save) %>
+      <%= submit_tag l(:button_cancel), onclick: "hideModal(this);", type: "button" %>
+    </p>
+  <% end %>
+<% end %>
+
+$("#ajax-modal")
+  .html("<%= escape_javascript form %>")
+  .find(".box")
+    .css("z-index", "auto");
+
+showModal("ajax-modal", "600px");

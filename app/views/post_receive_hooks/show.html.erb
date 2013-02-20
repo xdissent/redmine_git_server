@@ -11,8 +11,8 @@
   </p>
 </div>
 
-<%= link_to l(:label_post_receive_hook_edit), edit_post_receive_hook_path %> |
-<%= link_to l(:button_back), post_receive_hooks_path(@project, @repository) %>
+<%= link_to l(:label_post_receive_hook_edit), [:edit, @post_receive_hook] %> |
+<%= link_to l(:button_cancel), @post_receive_hook %>
 
 <% content_for :sidebar do %>
   <%= render "sidebar" %>

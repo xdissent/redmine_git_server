@@ -1,7 +1,12 @@
 <h2><%= l(:label_post_receive_hook_edit) %></h2>
 
-<%= labelled_form_for(@post_receive_hook) do |f| %>
-  <%= render :partial => "form", :locals => {:f => f} %>
+<%= labelled_form_for @post_receive_hook do |f| %>
+  <%= render partial: "form", locals: {f: f} %>
+  
+  <p>
+    <%= f.submit l(:button_save) %>
+    <%= link_to l(:button_cancel), post_receive_hooks_path %>
+  </p>
 <% end %>
 
 <% content_for :sidebar do %>

@@ -11,18 +11,10 @@
           <th><%= l(:field_name) %></th>
           <th><%= l(:field_url) %></th>
           <th></th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
-        <% @post_receive_hooks.each do |post_receive_hook| %>
-          <tr>
-            <td><%= link_to post_receive_hook.name, post_receive_hook %></td>
-            <td><%= post_receive_hook.url %></td>
-            <td><%= link_to l(:button_edit), edit_post_receive_hook_path(post_receive_hook) %></td>
-            <td><%= link_to l(:button_delete), post_receive_hook, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-          </tr>
-        <% end %>
+        <%= render @post_receive_hooks %>
       </tbody>
     </table>
   </div>

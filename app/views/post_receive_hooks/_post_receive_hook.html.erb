@@ -1,0 +1,8 @@
+<tr>
+  <td><%= link_to post_receive_hook.name, post_receive_hook %></td>
+  <td><%= post_receive_hook.url %></td>
+  <td>
+    <%= link_to l(:button_edit), [:edit, post_receive_hook] %> | 
+    <%= link_to l(:button_delete), post_receive_hook, method: :delete, data: { confirm: 'Are you sure?' } %>
+  </td>
+</tr>

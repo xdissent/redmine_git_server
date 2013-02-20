@@ -1,0 +1,4 @@
+hideModal();
+$("<%= escape_javascript render(@post_receive_hook) %>")
+  .appendTo(".post_receive_hooks")
+  .effect("highlight");

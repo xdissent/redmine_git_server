@@ -1,0 +1,3 @@
+hideModal();
+$("#<%= dom_id @post_receive_hook %>").replaceWith("<%= escape_javascript render(@post_receive_hook) %>");
+$("#<%= dom_id @post_receive_hook %>").effect("highlight");

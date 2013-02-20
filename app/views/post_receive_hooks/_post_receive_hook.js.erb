@@ -1,0 +1,7 @@
+<%# Use full url paths in here because it may be rendered in another controller. %>
+<%= div_for post_receive_hook do %>
+  <%= link_to post_receive_hook.name, edit_post_receive_hook_path(@project, @repository, post_receive_hook), remote: true %>
+  <%= content_tag :span, class: "splitcontentright" do %>
+    <%= link_to l(:button_delete), post_receive_hook_path(@project, @repository, post_receive_hook), remote: true, method: :delete, data: { confirm: "Are you sure?" } %>
+  <% end %>
+<% end %>
