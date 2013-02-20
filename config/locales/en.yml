@@ -16,3 +16,4 @@ en:
   field_public_key_comment: Comment
   field_public_key_content: Key Contents
   field_raw_content: Key Contents
+  setting_redmine_git_server_default_url_format: Default URL format
