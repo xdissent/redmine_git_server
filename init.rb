@@ -23,6 +23,7 @@ Redmine::Plugin.register :redmine_git_server do
     RepositoriesController.send :include, GitServerRepositoriesHelped
     SettingsController.send :include, GitServerRepositoriesHelped
     ProjectsController.send :include, GitServerRepositoriesHelped
+    User.send :include, HasManyPublicKeys
   end
 
   # Configure GitWit
