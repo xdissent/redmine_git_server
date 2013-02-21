@@ -2,14 +2,18 @@ jQuery(function($) {
   var lists = $(".git-url-list");
   lists.each(function(i, e) {
     var list = $(e),
-      container = $("<div>").insertAfter(list).addClass("git-url-list-container"),
-      bset = $("<span>").appendTo(container),
       field_id = list.attr("id") + "-field",
-      field = $("<input>").attr({id: field_id, readonly: "readonly"})
-        .addClass("git-url-list-field").appendTo(container),
+      container = $("<div>").insertAfter(list).addClass("git-url-list"),
+
+      copy_div = $("<div>").addClass("copy").appendTo(container),
       copy = $("<button>").attr({"data-clipboard-target": field_id})
-        .text("Copy to Clipboard").appendTo(container).addClass("git-url-list-copy")
-        .button({text: false, icons: {primary: "ui-icon-clipboard"}});
+        .text("Copy to Clipboard").appendTo(copy_div)
+        .button({text: false, icons: {primary: "ui-icon-clipboard"}}),
+
+      bset = $("<div>").addClass("protocol").appendTo(container),
+
+      field_div = $("<div>").addClass("url").appendTo(container);
+      field = $("<input>").attr({id: field_id, readonly: "readonly"}).appendTo(field_div);
       
     list.children("dt").each(function(j, dt) {
       var $dt = $(dt), 
@@ -32,7 +36,7 @@ jQuery(function($) {
       hoverClass: "ui-state-hover", activeClass: "ui-state-active"
     });
     zc.on("noflash", function(client, args) {
-      $(".git-url-list-copy").hide();
+      $(".git-url-list .copy").hide();
     });
   });
 });

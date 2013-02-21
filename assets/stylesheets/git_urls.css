@@ -1,24 +1,43 @@
-.git-url-list-field {
+.git-url-list {
+  overflow: hidden;
+  max-width: 600px;
+}
+    
+.git-url-list .copy {
+  float: right;
+  margin-left: 4px;
+}
+
+.git-url-list .copy button {
   margin-top: 0;
-  margin-right: 2px;
-  width: 145px;
+}
+    
+.git-url-list .protocol {
+  float: left;
+}
+    
+.git-url-list .url {
+  overflow: hidden;
+  padding-top: 1px;
 }
 
-.controller-repositories .git-url-list-field {
-  width: 350px;
+.git-url-list .url input {
+  width: 99%;
+}
+    
+.git-url-list .url, .git-url-list .copy {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-.controller-projects .git-url-list-container {
-  margin-bottom: 2em;
-}
-
-.git-url-list-container .ui-button-text {
+.git-url-list .ui-button-text {
   font-size: 11px;
   line-height: normal;
   font-weight: normal;
   /*padding: 2px 7px 3px 5px;*/
 }
 
-.git-url-list-container .ui-button-icon-only {
-  /*width: 1.8em;*/
+.controller-projects .git-url-list {
+  margin-bottom: 2em;
 }
