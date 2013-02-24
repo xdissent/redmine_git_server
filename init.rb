@@ -28,11 +28,11 @@ ActiveSupport::Dependencies.autoload_paths += %w{models controllers}.map { |c| F
 RedmineApp::Application.config.to_prepare do
 
   # Add helper to controllers that need it
+  RepositoriesController.send :include, EmptyRepositoryGitInstructions
   RepositoriesController.send :include, GitServerRepositoriesHelped
   SettingsController.send :include, GitServerRepositoriesHelped
   ProjectsController.send :include, GitServerRepositoriesHelped
   User.send :include, HasManyPublicKeys
-  RepositoriesController.send :include, DisplayGitUrls
 
   # Configure GitWit
   GitWit.default_config!
