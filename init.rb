@@ -17,27 +17,31 @@ Redmine::Plugin.register :redmine_git_server do
     permission :manage_post_receive_hooks, {post_receive_hooks: [:new, :create, :edit, :update, :destroy]}, require: :member
   end
 
-  # Autoload concerns - not necessary in Rails 4
-  ActiveSupport::Dependencies.autoload_paths += %w{models controllers}.map { |c| File.join directory, "app/#{c}/concerns" }
-
   # Add GitServer SCM (really, registers Repository::GitServer)
   Redmine::Scm::Base.add "GitServer"
+end
+
+# Autoload concerns - not necessary in Rails 4
+ActiveSupport::Dependencies.autoload_paths += %w{models controllers}.map { |c| File.expand_path "../app/#{c}/concerns", __FILE__ }
+
+# After classes are loaded...
+RedmineApp::Application.config.to_prepare do
 
   # Add helper to controllers that need it
-  RedmineApp::Application.config.to_prepare do
-    RepositoriesController.send :include, GitServerRepositoriesHelped
-    SettingsController.send :include, GitServerRepositoriesHelped
-    ProjectsController.send :include, GitServerRepositoriesHelped
-    User.send :include, HasManyPublicKeys
-  end
+  RepositoriesController.send :include, GitServerRepositoriesHelped
+  SettingsController.send :include, GitServerRepositoriesHelped
+  ProjectsController.send :include, GitServerRepositoriesHelped
+  User.send :include, HasManyPublicKeys
+  RepositoriesController.send :include, DisplayGitUrls
 
   # Configure GitWit
   GitWit.default_config!
   GitWit.configure do |config|
+
     # Pull settings from configuration.yml
     settings = Redmine::Configuration["git_wit"] || {}
     %w(repositories_path ssh_user insecure_write insecure_auth 
-      realm git_http_backend_path).each do |k|
+      realm git_path).each do |k|
       config.send "#{k}=".to_sym, settings[k] if settings[k].present?
     end
 
