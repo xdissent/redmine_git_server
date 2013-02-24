@@ -1,0 +1,61 @@
+<%= call_hook(:view_repositories_show_contextual, { :repository => @repository, :project => @project }) %>
+
+<% if @repositories.size > 1 %>
+  <% content_for :sidebar do %>
+    <h3><%= l(:label_repository_plural) %></h3>
+    <p>
+      <%= @repositories.sort.collect {|repo|
+          link_to h(repo.name), 
+                  {:controller => 'repositories', :action => 'show',
+                   :id => @project, :repository_id => repo.identifier_param, :rev => nil, :path => nil},
+                  :class => 'repository' + (repo == @repository ? ' selected' : '')
+        }.join('<br />').html_safe %>
+    </p>
+  <% end %>
+<% end %>
+
+<% base_name = File.basename(@repository.url, ".git") %>
+<% push_url = GitWit.ssh_user.present? ? @repository.git_ssh_url : @repository.git_https_url %>
+
+<% code = capture do %>
+## Git Setup
+
+```console
+$ git config --global user.name "<%= User.current.name :firstname_lastname %>"
+$ git config --global user.email "<%= User.current.mail %>"
+```
+
+## New Repository
+
+```console
+$ mkdir <%= base_name %>
+$ cd <%= base_name %>
+$ git init
+$ touch readme.txt
+$ git add readme.txt
+$ git commit -m "first commit"
+$ git remote add origin <%= push_url %>
+$ git push -u origin master
+```
+
+## Existing Repository
+
+```console
+$ cd <%= base_name %>
+$ git remote add origin <%= push_url %>
+$ git push -u origin master
+```
+<% end %>
+
+<div class="wiki">
+  <%= textilizable code %>
+</div>
+
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag "scm" %>
+<% end %>
+
+<% html_title(l(:label_repository)) -%>
+
+<% flash.now[:warning] = "Repository is empty. Get started by following the instructions below." %>

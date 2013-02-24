@@ -1,5 +1,5 @@
 <dl class="git-url-list" id="git-url-list-<%= repository.id %>">
-  <% if !User.current.anonymous? %>
+  <% if !User.current.anonymous? && GitWit.ssh_user.present? %>
     <dt>SSH</dt>
     <dd><%= repository.git_ssh_url %></dd>
   <% end %>
