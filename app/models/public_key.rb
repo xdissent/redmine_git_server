@@ -1,3 +1,5 @@
+require 'digest'
+
 class PublicKey < ActiveRecord::Base
   belongs_to :user
   attr_accessible :raw_content
@@ -21,6 +23,7 @@ class PublicKey < ActiveRecord::Base
 
   def save_raw_content
     self.content, self.comment = split_raw_content if @raw_content.present?
+    self.checksum = Digest::MD5.hexdigest(self.content)
   end
 
   def check_raw_content
