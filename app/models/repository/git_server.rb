@@ -48,7 +48,7 @@ class Repository::GitServer < Repository::Git
     key = Setting.sys_api_key
     url_path = "repositories/#{id}/post_receive_hooks/run"
     hook_url = "#{http}://#{host}/#{url_path}?key=#{key}"
-    %(#!/bin/sh\ncurl -s -T - "#{hook_url}")
+    %(#!/bin/sh\ncurl -k -s -T - "#{hook_url}")
   end
 
   def self.scm_adapter_class
